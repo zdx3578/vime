@@ -5,6 +5,7 @@ os.environ["THEANO_FLAGS"] = "device=cpu"
 
 from rllab.policies.gaussian_mlp_policy import GaussianMLPPolicy
 from rllab.envs.normalized_env import NormalizedEnv
+from rllab.envs.gym_env import *
 
 from sandbox.vime.algos.trpo_expl import TRPO
 from rllab.misc.instrument import stub, run_experiment_lite
@@ -16,9 +17,9 @@ stub(globals())
 seeds = range(2)
 etas = [0.0001]
 # SwimmerGather hierarchical task
-mdp_classes = [SwimmerGatherEnv]
-mdps = [NormalizedEnv(env=mdp_class())
-        for mdp_class in mdp_classes]
+#mdp_classes = [SwimmerGatherEnv]
+mdps = [GymEnv('HumanoidStandup-v1')]
+#        for mdp_class in mdp_classes]
 
 param_cart_product = itertools.product(
     mdps, etas, seeds
@@ -43,7 +44,7 @@ for mdp, eta, seed in param_cart_product:
         batch_size=batch_size,
         whole_paths=True,
         max_path_length=500,
-        n_itr=10000,
+        n_itr=500,
         step_size=0.01,
         eta=eta,
         snn_n_samples=10,
@@ -65,7 +66,7 @@ for mdp, eta, seed in param_cart_product:
     run_experiment_lite(
         algo.train(),
         exp_prefix="trpo-expl",
-        n_parallel=4,
+        n_parallel=1,
         snapshot_mode="last",
         seed=seed,
         mode="local",

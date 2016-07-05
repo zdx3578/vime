@@ -29,7 +29,7 @@ for mdp, eta, seed in param_cart_product:
 
     policy = GaussianMLPPolicy(
         env_spec=mdp.spec,
-        hidden_sizes=(64, 32),
+        hidden_sizes=(128,64),
     )
 
     baseline = LinearFeatureBaseline(
@@ -44,7 +44,7 @@ for mdp, eta, seed in param_cart_product:
         batch_size=batch_size,
         whole_paths=True,
         max_path_length=500,
-        n_itr=500,
+        n_itr=1500,
         step_size=0.01,
         eta=eta,
         snn_n_samples=10,
@@ -58,7 +58,7 @@ for mdp, eta, seed in param_cart_product:
         replay_pool_size=1000000,
         n_updates_per_sample=5000,
         second_order_update=True,
-        unn_n_hidden=[32],
+        unn_n_hidden=[64],
         unn_layers_type=[1, 1],
         unn_learning_rate=0.0001
     )
@@ -69,6 +69,7 @@ for mdp, eta, seed in param_cart_product:
         n_parallel=1,
         snapshot_mode="last",
         seed=seed,
+	args_data="/home/ubuntu/work/rllab/data/local/trpo-expl/trpo-expl_2016_06_29_01_56_06_0001/params.pkl",
         mode="local",
         script="sandbox/vime/experiments/run_experiment_lite.py",
     )
